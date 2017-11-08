@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B505FA1C1FB34766007A0585 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = B505FA1E1FB34766007A0585 /* Localizable.strings */; };
+		B56E89791FB22D8B00AA2D28 /* NDEF.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56E89781FB22D8B00AA2D28 /* NDEF.swift */; };
 		B5C71BEB1FB1F76E00CA00AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C71BEA1FB1F76E00CA00AF /* AppDelegate.swift */; };
 		B5C71BED1FB1F76E00CA00AF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C71BEC1FB1F76E00CA00AF /* ViewController.swift */; };
 		B5C71BF01FB1F76E00CA00AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5C71BEE1FB1F76E00CA00AF /* Main.storyboard */; };
@@ -34,6 +36,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B505FA191FB346B1007A0585 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
+		B505FA1D1FB34766007A0585 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B505FA1F1FB34774007A0585 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		B56E89781FB22D8B00AA2D28 /* NDEF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NDEF.swift; sourceTree = "<group>"; };
 		B5C71BE71FB1F76E00CA00AF /* NFC Reader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NFC Reader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C71BEA1FB1F76E00CA00AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B5C71BEC1FB1F76E00CA00AF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +53,7 @@
 		B5C71C061FB1F76E00CA00AF /* NFC ReaderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NFC ReaderUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C71C0A1FB1F76E00CA00AF /* NFC_ReaderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFC_ReaderUITests.swift; sourceTree = "<group>"; };
 		B5C71C0C1FB1F76E00CA00AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5C71C181FB1F7D500CA00AF /* NFC Reader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "NFC Reader.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,12 +104,15 @@
 		B5C71BE91FB1F76E00CA00AF /* NFC Reader */ = {
 			isa = PBXGroup;
 			children = (
+				B5C71C181FB1F7D500CA00AF /* NFC Reader.entitlements */,
 				B5C71BEA1FB1F76E00CA00AF /* AppDelegate.swift */,
 				B5C71BEC1FB1F76E00CA00AF /* ViewController.swift */,
 				B5C71BEE1FB1F76E00CA00AF /* Main.storyboard */,
 				B5C71BF11FB1F76E00CA00AF /* Assets.xcassets */,
 				B5C71BF31FB1F76E00CA00AF /* LaunchScreen.storyboard */,
 				B5C71BF61FB1F76E00CA00AF /* Info.plist */,
+				B56E89781FB22D8B00AA2D28 /* NDEF.swift */,
+				B505FA1E1FB34766007A0585 /* Localizable.strings */,
 			);
 			path = "NFC Reader";
 			sourceTree = "<group>";
@@ -194,6 +204,11 @@
 					B5C71BE61FB1F76E00CA00AF = {
 						CreatedOnToolsVersion = 9.0.1;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.NearFieldCommunicationTagReading = {
+								enabled = 1;
+							};
+						};
 					};
 					B5C71BFA1FB1F76E00CA00AF = {
 						CreatedOnToolsVersion = 9.0.1;
@@ -214,6 +229,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = B5C71BDE1FB1F76E00CA00AF;
 			productRefGroup = B5C71BE81FB1F76E00CA00AF /* Products */;
@@ -233,6 +249,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5C71BF51FB1F76E00CA00AF /* LaunchScreen.storyboard in Resources */,
+				B505FA1C1FB34766007A0585 /* Localizable.strings in Resources */,
 				B5C71BF21FB1F76E00CA00AF /* Assets.xcassets in Resources */,
 				B5C71BF01FB1F76E00CA00AF /* Main.storyboard in Resources */,
 			);
@@ -260,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5C71BED1FB1F76E00CA00AF /* ViewController.swift in Sources */,
+				B56E89791FB22D8B00AA2D28 /* NDEF.swift in Sources */,
 				B5C71BEB1FB1F76E00CA00AF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -296,10 +314,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		B505FA1E1FB34766007A0585 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B505FA1D1FB34766007A0585 /* en */,
+				B505FA1F1FB34774007A0585 /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		B5C71BEE1FB1F76E00CA00AF /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				B5C71BEF1FB1F76E00CA00AF /* Base */,
+				B505FA191FB346B1007A0585 /* de */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -319,6 +347,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -376,6 +405,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -426,7 +456,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "NFC Reader/NFC Reader.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4PV47B4W65;
 				INFOPLIST_FILE = "NFC Reader/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thomit.nfcreader.NFC-Reader";
@@ -440,7 +472,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "NFC Reader/NFC Reader.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4PV47B4W65;
 				INFOPLIST_FILE = "NFC Reader/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.thomit.nfcreader.NFC-Reader";
