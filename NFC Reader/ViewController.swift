@@ -34,6 +34,8 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
         
         NSLog("Reader Session Ready: \(session.isReady), error: \(error.localizedDescription)")
         
+        self.isScanning = false
+        
     }
     
     func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]){
@@ -41,17 +43,20 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
         for message:NFCNDEFMessage in messages {
         
             message.records.forEach({ (record) in
-                
-                let type = String(data: record.type, encoding: String.Encoding.utf8)
-                let identifier: String = String(data: record.identifier, encoding: String.Encoding.utf8)!
-                let payload: String = String(data: record.payload, encoding: String.Encoding.ascii)!
+                let type = String(data: record.type, encoding: .utf8)
+                let string = record.payloadString
                 let tnf: String = NSNumber(value: record.typeNameFormat.rawValue).stringValue
                 
-                self.tnrLabel.text = tnf
-                self.typeLabel.text = type
-                self.payloadLabel.text = payload
+                let uriType = record.statusByte
                 
-                NSLog("Record Type: \(parsePayload(record.payload)) with identifier: \(identifier), contents: \(payload)")
+                DispatchQueue.main.async {
+                    self.tnrLabel.text = tnf
+                    self.typeLabel.text = type
+                    self.payloadLabel.text = string
+                }
+    
+                
+                NSLog("Record Type Name Format: \(tnf) with with type: \(type), uri type \(uriType), contents: \(string)")
             })
         }
         

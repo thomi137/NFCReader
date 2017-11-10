@@ -11,6 +11,10 @@ import CoreNFC
 
 extension NFCNDEFPayload {
     
+    var statusByte: UInt8 {
+        return self.payload.first!
+    }
+    
     var payloadLength: Int{
         return self.payload.count
     }
@@ -34,10 +38,9 @@ extension NFCNDEFPayload {
         case .nfcExternal:
             return ""
         case .nfcWellKnown:
-            let uriIdentifier = self.payload.first
             let payload = self.payload.subdata(in: typeLength..<payloadLength)
             let payloadString = String(data: payload, encoding: .utf8)
-            let uri = WellKnownNDEFURI(rawValue: uriIdentifier!)
+            let uri = WellKnownNDEFURI(rawValue: statusByte)
             return uri!.uriString(payloadString: payloadString!)!
         case .unchanged:
             return ""
@@ -45,6 +48,13 @@ extension NFCNDEFPayload {
             return ""
         }
     }
+    
+}
+
+enum NDEFRTDType{
+    
+    case U(prefix: String, address: String)
+    case T(locale: String, text: String)
     
 }
 
