@@ -9,43 +9,93 @@
 import Foundation
 import CoreNFC
 
+struct NFCNDEFText {
+    
+    var statusByte: UInt8
+    var payload: Data
+    
+    var encoding: String.Encoding {
+
+        let encodingBit = statusByte & 0x80
+        return encodingBit == 0 ? .utf8 : .utf16
+        
+    }
+    
+    var localeLength: Int {
+
+        return Int(statusByte & 0x3F)
+        
+    }
+    
+    var locale: String {
+        
+        let localeBytes = payload.prefix(upTo: localeLength)
+        return String(data: localeBytes, encoding: .ascii)!
+        
+    }
+    
+    var getText: String? {
+        
+        let textBytes = payload.suffix(from: localeLength + 1)
+        return String(data: textBytes, encoding: encoding)
+        
+    }
+
+}
+
+struct NFCNDEFUri {
+    
+    var payload: Data
+    
+    var uriType: WellKnownNDEFURI? {
+        guard let firstByte = payload.first else { return WellKnownNDEFURI(rawValue: 0x00) }
+        return WellKnownNDEFURI(rawValue: firstByte)
+    }
+    
+    var getText: String? {
+        
+        guard let uriAddress = String(data: payload.suffix(from: 1), encoding: .utf8) else { return "" }
+        return uriType?.uriString(payloadString: uriAddress)
+        
+    }
+    
+}
+
 extension NFCNDEFPayload {
     
-    var statusByte: UInt8 {
-        return self.payload.first!
+    var typeString: String {
+        guard let retVal = String(data: self.type, encoding: .utf8) else { return "" }
+        return retVal
     }
     
-    var payloadLength: Int{
-        return self.payload.count
+    var firstByte: UInt8 {
+        
+        guard let firstByte = self.payload.first else { return 0x00 }
+        return firstByte
+        
     }
-    
-    var typeLength: Int {
-        return self.type.count
-    }
-    
-    var isUri: Bool{
-        return self.type == Data(bytes: [0x55])
-    }
-    
-    var payloadString: String{
-        switch self.typeNameFormat{
-        case .absoluteURI:
-            return ""
-        case .empty:
-            return ""
-        case .media:
-            return ""
-        case .nfcExternal:
-            return ""
-        case .nfcWellKnown:
-            let payload = self.payload.subdata(in: typeLength..<payloadLength)
-            let payloadString = String(data: payload, encoding: .utf8)
-            let uri = WellKnownNDEFURI(rawValue: statusByte)
-            return uri!.uriString(payloadString: payloadString!)!
-        case .unchanged:
-            return ""
-        case .unknown:
-            return ""
+
+    var parsedPayload: NDEFRTDType{
+        
+        switch (self.typeNameFormat, self.typeString){
+        case (.absoluteURI, _):
+            return .Unknown
+        case (.empty, _):
+            return .Unknown
+        case (.media, _):
+            return .Unknown
+        case (.nfcExternal, _):
+            return .Unknown
+        case (.nfcWellKnown, let typeString) where typeString == "T":
+            return .T(parsedPayload: NFCNDEFText(statusByte: firstByte, payload: self.payload.suffix(from: 1)))
+        case (.nfcWellKnown, let typeString) where typeString == "U":
+            return .U(parsedPayload: NFCNDEFUri(payload: payload))
+        case (.unchanged, _):
+            return .Unknown
+        case (.unknown, _):
+            return .Unknown
+        default: ()
+            return .Unknown
         }
     }
     
@@ -53,8 +103,9 @@ extension NFCNDEFPayload {
 
 enum NDEFRTDType{
     
-    case U(prefix: String, address: String)
-    case T(locale: String, text: String)
+    case U(parsedPayload: NFCNDEFUri)
+    case T(parsedPayload: NFCNDEFText)
+    case Unknown
     
 }
 
@@ -102,6 +153,7 @@ enum WellKnownNDEFURI: UInt8 {
 extension WellKnownNDEFURI {
     
     func uriString(payloadString: String) -> String?{
+        
         switch self {
         case .Full:
             return payloadString

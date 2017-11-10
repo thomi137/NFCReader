@@ -40,24 +40,36 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
     
     func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]){
         
-        for message:NFCNDEFMessage in messages {
         
+        var type: String = "Unknown"
+        var text: String = "No Text"
+        var tnf: UInt8 = 0
+        
+        for message:NFCNDEFMessage in messages {
+            
             message.records.forEach({ (record) in
-                let type = String(data: record.type, encoding: .utf8)
-                let string = record.payloadString
-                let tnf: String = NSNumber(value: record.typeNameFormat.rawValue).stringValue
                 
-                let uriType = record.statusByte
+                switch record.parsedPayload{
+                    
+                case .U(let parsedPayload):
+                    text = parsedPayload.getText!
+                case .T(let parsedPayload):
+                    text = parsedPayload.getText!
+                case .Unknown:
+                    text = "Type unknown"
+                    
+                    
+                }
+                type = record.typeString
+            })
                 
                 DispatchQueue.main.async {
-                    self.tnrLabel.text = tnf
-                    self.typeLabel.text = type
-                    self.payloadLabel.text = string
+                    self.tnrLabel.text = "reserved"
+                    self.typeLabel.text = String(type)
+                    self.payloadLabel.text = text
                 }
     
-                
-                NSLog("Record Type Name Format: \(tnf) with with type: \(type), uri type \(uriType), contents: \(string)")
-            })
+                NSLog("Record Type Name Format: \(tnf) with with type: \(type), contents: \(text)")
         }
         
     }
