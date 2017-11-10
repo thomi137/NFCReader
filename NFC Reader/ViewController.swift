@@ -15,7 +15,6 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
     
     @IBOutlet weak var payloadLabel: UILabel!
     @IBOutlet weak var typeLabel: UILabel!
-    @IBOutlet weak var tnrLabel: UILabel!
     
     @IBAction func scanButtonPressed(_ sender: UIButton) {
         let readerSession: NFCNDEFReaderSession = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
@@ -43,7 +42,6 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
         
         var type: String = "Unknown"
         var text: String = "No Text"
-        var tnf: UInt8 = 0
         
         for message:NFCNDEFMessage in messages {
             
@@ -52,9 +50,9 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
                 switch record.parsedPayload{
                     
                 case .U(let parsedPayload):
-                    text = parsedPayload.getText!
+                    text = parsedPayload.getText()!
                 case .T(let parsedPayload):
-                    text = parsedPayload.getText!
+                    text = parsedPayload.getText()!
                 case .Unknown:
                     text = "Type unknown"
                     
@@ -63,17 +61,15 @@ class ViewController: UIViewController, NFCNDEFReaderSessionDelegate {
                 type = record.typeString
             })
                 
-                DispatchQueue.main.async {
-                    self.tnrLabel.text = "reserved"
-                    self.typeLabel.text = String(type)
-                    self.payloadLabel.text = text
-                }
-    
-                NSLog("Record Type Name Format: \(tnf) with with type: \(type), contents: \(text)")
-        }
+            DispatchQueue.main.async {
+                self.typeLabel.text = String(type)
+                self.payloadLabel.text = text
+            }
+            
+            NSLog("Record Type with type: \(type), contents: \(text)")
         
+        }
     }
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -9,14 +9,20 @@
 import Foundation
 import CoreNFC
 
-struct NFCNDEFText {
+protocol NFCNDEFWellKnownType{
+    
+    func getText() -> String?
+    
+}
+
+struct NFCNDEFText: NFCNDEFWellKnownType {
     
     var statusByte: UInt8
     var payload: Data
     
     var encoding: String.Encoding {
 
-        let encodingBit = statusByte & 0x80
+        let encodingBit = statusByte & (1 << 7)
         return encodingBit == 0 ? .utf8 : .utf16
         
     }
@@ -34,16 +40,15 @@ struct NFCNDEFText {
         
     }
     
-    var getText: String? {
-        
+    func getText() -> String? {
+        // Go past status bytes and locale bytes.
         let textBytes = payload.suffix(from: localeLength + 1)
         return String(data: textBytes, encoding: encoding)
-        
     }
-
+    
 }
 
-struct NFCNDEFUri {
+struct NFCNDEFUri: NFCNDEFWellKnownType {
     
     var payload: Data
     
@@ -52,7 +57,7 @@ struct NFCNDEFUri {
         return WellKnownNDEFURI(rawValue: firstByte)
     }
     
-    var getText: String? {
+    func getText() -> String? {
         
         guard let uriAddress = String(data: payload.suffix(from: 1), encoding: .utf8) else { return "" }
         return uriType?.uriString(payloadString: uriAddress)
@@ -230,5 +235,3 @@ extension WellKnownNDEFURI {
         }
     }
 }
-
-
